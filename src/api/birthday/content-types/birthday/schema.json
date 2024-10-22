@@ -12,20 +12,32 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "date": {
+    "birthdate": {
       "type": "date"
     },
     "name": {
       "type": "string"
-    },
-    "participants": {
-      "type": "json"
     },
     "user": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "plugin::users-permissions.user",
       "inversedBy": "birthdays"
+    },
+    "album": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::media-submission.media-submission"
+    },
+    "carousel": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::media-submission.media-submission"
+    },
+    "quoteBook": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::media-submission.media-submission"
     }
   }
 }

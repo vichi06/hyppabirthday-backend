@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_content_quotes",
+  "info": {
+    "displayName": "Quote",
+    "icon": "message",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "author": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    }
+  }
+}

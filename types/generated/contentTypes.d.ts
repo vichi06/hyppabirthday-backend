@@ -1,39 +1,5 @@
 import type { Struct, Schema } from '@strapi/strapi';
 
-export interface ApiBirthdayBirthday extends Struct.CollectionTypeSchema {
-  collectionName: 'birthdays';
-  info: {
-    singularName: 'birthday';
-    pluralName: 'birthdays';
-    displayName: 'Birthday';
-    description: '';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  attributes: {
-    date: Schema.Attribute.Date;
-    name: Schema.Attribute.String;
-    participants: Schema.Attribute.JSON;
-    user: Schema.Attribute.Relation<
-      'manyToOne',
-      'plugin::users-permissions.user'
-    >;
-    createdAt: Schema.Attribute.DateTime;
-    updatedAt: Schema.Attribute.DateTime;
-    publishedAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    locale: Schema.Attribute.String;
-    localizations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::birthday.birthday'
-    >;
-  };
-}
-
 export interface PluginUploadFile extends Struct.CollectionTypeSchema {
   collectionName: 'files';
   info: {
@@ -520,6 +486,153 @@ export interface PluginUsersPermissionsUser
   };
 }
 
+export interface ApiBirthdayBirthday extends Struct.CollectionTypeSchema {
+  collectionName: 'birthdays';
+  info: {
+    singularName: 'birthday';
+    pluralName: 'birthdays';
+    displayName: 'Birthday';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    birthdate: Schema.Attribute.Date;
+    name: Schema.Attribute.String;
+    user: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    album: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::media-submission.media-submission'
+    >;
+    carousel: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::media-submission.media-submission'
+    >;
+    quoteBook: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::media-submission.media-submission'
+    >;
+    createdAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    publishedAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::birthday.birthday'
+    >;
+  };
+}
+
+export interface ApiGuestGuest extends Struct.CollectionTypeSchema {
+  collectionName: 'guests';
+  info: {
+    singularName: 'guest';
+    pluralName: 'guests';
+    displayName: 'Guest';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    email: Schema.Attribute.Email & Schema.Attribute.Required;
+    state: Schema.Attribute.Enumeration<['pending', 'accepted', 'declined']>;
+    invitations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::invitation.invitation'
+    >;
+    submissions: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::media-submission.media-submission'
+    >;
+    createdAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    publishedAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::guest.guest'>;
+  };
+}
+
+export interface ApiInvitationInvitation extends Struct.CollectionTypeSchema {
+  collectionName: 'invitations';
+  info: {
+    singularName: 'invitation';
+    pluralName: 'invitations';
+    displayName: 'Invitation';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    email: Schema.Attribute.Email;
+    invitationLink: Schema.Attribute.UID;
+    sendAt: Schema.Attribute.DateTime;
+    expiresAt: Schema.Attribute.DateTime;
+    birthday: Schema.Attribute.Relation<'oneToOne', 'api::birthday.birthday'>;
+    guest: Schema.Attribute.Relation<'manyToOne', 'api::guest.guest'>;
+    state: Schema.Attribute.Enumeration<['pending', 'accepted', 'declined']>;
+    createdAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    publishedAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::invitation.invitation'
+    >;
+  };
+}
+
+export interface ApiMediaSubmissionMediaSubmission
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'media_submissions';
+  info: {
+    singularName: 'media-submission';
+    pluralName: 'media-submissions';
+    displayName: 'Media Submission';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    type: Schema.Attribute.Enumeration<['image', 'video', 'quote']>;
+    image: Schema.Attribute.Media<'images' | 'files'>;
+    video: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    submittedBy: Schema.Attribute.Relation<'manyToOne', 'api::guest.guest'>;
+    birthday: Schema.Attribute.Relation<'oneToOne', 'api::birthday.birthday'>;
+    quote: Schema.Attribute.Component<'content.quote', false>;
+    createdAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    publishedAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::media-submission.media-submission'
+    >;
+  };
+}
+
 export interface AdminPermission extends Struct.CollectionTypeSchema {
   collectionName: 'admin_permissions';
   info: {
@@ -885,7 +998,6 @@ export interface AdminTransferTokenPermission
 declare module '@strapi/strapi' {
   export module Public {
     export interface ContentTypeSchemas {
-      'api::birthday.birthday': ApiBirthdayBirthday;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
       'plugin::i18n.locale': PluginI18NLocale;
@@ -896,6 +1008,10 @@ declare module '@strapi/strapi' {
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
+      'api::birthday.birthday': ApiBirthdayBirthday;
+      'api::guest.guest': ApiGuestGuest;
+      'api::invitation.invitation': ApiInvitationInvitation;
+      'api::media-submission.media-submission': ApiMediaSubmissionMediaSubmission;
       'admin::permission': AdminPermission;
       'admin::user': AdminUser;
       'admin::role': AdminRole;
